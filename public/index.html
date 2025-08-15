@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Trader v2.5.0</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Neural Trader</h1>
+            <div class="status-bar">
+                <span id="connection-status" class="status-indicator">●</span>
+                <span id="trading-status">Initializing...</span>
+                <button id="toggle-trading" class="btn btn-primary">Start Trading</button>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <div class="card portfolio-card">
+                <h2>Portfolio</h2>
+                <div class="balance-section">
+                    <div class="balance-item">
+                        <span>Total Value</span>
+                        <strong id="total-value">$0.00</strong>
+                    </div>
+                    <div class="balance-item">
+                        <span>Available</span>
+                        <strong id="available-balance">$0.00</strong>
+                    </div>
+                    <div class="balance-item">
+                        <span>P&L</span>
+                        <strong id="pnl" class="pnl-value">$0.00</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card performance-card">
+                <h2>Performance</h2>
+                <div class="metrics">
+                    <div class="metric">
+                        <label>Win Rate</label>
+                        <span id="win-rate">0%</span>
+                    </div>
+                    <div class="metric">
+                        <label>Sharpe Ratio</label>
+                        <span id="sharpe-ratio">0.00</span>
+                    </div>
+                    <div class="metric">
+                        <label>Max Drawdown</label>
+                        <span id="max-drawdown">0%</span>
+                    </div>
+                    <div class="metric">
+                        <label>Profit Factor</label>
+                        <span id="profit-factor">0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card positions-card">
+                <h2>Open Positions</h2>
+                <div class="table-container">
+                    <table id="positions-table">
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Side</th>
+                                <th>Quantity</th>
+                                <th>Entry</th>
+                                <th>Current</th>
+                                <th>P&L</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="positions-body">
+                            <tr>
+                                <td colspan="7" class="empty-state">No open positions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card chart-card">
+                <h2>Equity Curve</h2>
+                <canvas id="equity-chart"></canvas>
+            </div>
+
+            <div class="card signals-card">
+                <h2>Recent Signals</h2>
+                <div class="signals-list" id="signals-list">
+                    <div class="empty-state">Waiting for signals...</div>
+                </div>
+            </div>
+
+            <div class="card trades-card">
+                <h2>Recent Trades</h2>
+                <div class="table-container">
+                    <table id="trades-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Symbol</th>
+                                <th>Side</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>P&L</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trades-body">
+                            <tr>
+                                <td colspan="6" class="empty-state">No recent trades</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Neural Trader v2.5.0 | Advanced ML Trading System</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

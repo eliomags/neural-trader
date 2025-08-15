@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  neural-trader:
+    build: .
+    container_name: neural-trader
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - TRADING_MODE=paper
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./config:/app/config
+    restart: unless-stopped
+    networks:
+      - trading-network
+
+  redis:
+    image: redis:alpine
+    container_name: neural-trader-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - trading-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: neural-trader-db
+    environment:
+      - POSTGRES_DB=neural_trader
+      - POSTGRES_USER=trader
+      - POSTGRES_PASSWORD=secure_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - trading-network
+
+networks:
+  trading-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+  postgres-data:

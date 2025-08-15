@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Trader - Stock Trading</title>
+    <link rel="stylesheet" href="stocks.css">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1>📈 Neural Stock Trader</h1>
+                <div class="market-status">
+                    <span id="market-status-indicator" class="status-indicator">●</span>
+                    <span id="market-status-text">Market Closed</span>
+                    <span id="market-time"></span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="mode-switcher">
+                    <a href="index.html" class="mode-link">Crypto Trading</a>
+                    <span class="mode-active">Stock Trading</span>
+                </div>
+                <button id="toggle-trading" class="btn btn-primary">Start Trading</button>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <!-- Market Overview -->
+            <div class="card market-overview">
+                <h2>Market Overview</h2>
+                <div class="indices">
+                    <div class="index-card">
+                        <span class="index-name">S&P 500</span>
+                        <span class="index-value" id="sp500">4,500.00</span>
+                        <span class="index-change positive">+0.5%</span>
+                    </div>
+                    <div class="index-card">
+                        <span class="index-name">NASDAQ</span>
+                        <span class="index-value" id="nasdaq">14,000.00</span>
+                        <span class="index-change positive">+0.8%</span>
+                    </div>
+                    <div class="index-card">
+                        <span class="index-name">DOW</span>
+                        <span class="index-value" id="dow">35,000.00</span>
+                        <span class="index-change negative">-0.2%</span>
+                    </div>
+                    <div class="index-card">
+                        <span class="index-name">VIX</span>
+                        <span class="index-value" id="vix">15.50</span>
+                        <span class="index-change negative">-2.1%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Summary -->
+            <div class="card account-summary">
+                <h2>Account Summary</h2>
+                <div class="account-metrics">
+                    <div class="metric">
+                        <label>Portfolio Value</label>
+                        <span id="portfolio-value">$100,000.00</span>
+                    </div>
+                    <div class="metric">
+                        <label>Buying Power</label>
+                        <span id="buying-power">$25,000.00</span>
+                    </div>
+                    <div class="metric">
+                        <label>Day P&L</label>
+                        <span id="day-pnl" class="pnl-value positive">+$1,250.00</span>
+                    </div>
+                    <div class="metric">
+                        <label>Total P&L</label>
+                        <span id="total-pnl" class="pnl-value positive">+$15,000.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Watchlist -->
+            <div class="card watchlist-card">
+                <div class="card-header">
+                    <h2>Watchlist</h2>
+                    <button class="btn btn-small" onclick="addToWatchlist()">+ Add</button>
+                </div>
+                <div class="watchlist-grid">
+                    <div class="watchlist-item">
+                        <div class="stock-info">
+                            <span class="symbol">AAPL</span>
+                            <span class="company">Apple Inc.</span>
+                        </div>
+                        <div class="stock-price">
+                            <span class="price">$178.50</span>
+                            <span class="change positive">+1.2%</span>
+                        </div>
+                        <div class="stock-signals">
+                            <span class="signal-badge buy">BUY</span>
+                            <span class="confidence">85%</span>
+                        </div>
+                    </div>
+                    <div class="watchlist-item">
+                        <div class="stock-info">
+                            <span class="symbol">MSFT</span>
+                            <span class="company">Microsoft</span>
+                        </div>
+                        <div class="stock-price">
+                            <span class="price">$380.00</span>
+                            <span class="change positive">+0.8%</span>
+                        </div>
+                        <div class="stock-signals">
+                            <span class="signal-badge hold">HOLD</span>
+                            <span class="confidence">62%</span>
+                        </div>
+                    </div>
+                    <div class="watchlist-item">
+                        <div class="stock-info">
+                            <span class="symbol">NVDA</span>
+                            <span class="company">NVIDIA</span>
+                        </div>
+                        <div class="stock-price">
+                            <span class="price">$480.00</span>
+                            <span class="change positive">+2.5%</span>
+                        </div>
+                        <div class="stock-signals">
+                            <span class="signal-badge buy">BUY</span>
+                            <span class="confidence">78%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <div class="chart-controls">
+                        <input type="text" id="chart-symbol" placeholder="Enter symbol..." value="AAPL">
+                        <select id="chart-timeframe">
+                            <option value="1D">1 Day</option>
+                            <option value="5D">5 Days</option>
+                            <option value="1M">1 Month</option>
+                            <option value="3M">3 Months</option>
+                            <option value="1Y">1 Year</option>
+                        </select>
+                        <div class="chart-types">
+                            <button class="chart-type active" data-type="candlestick">Candles</button>
+                            <button class="chart-type" data-type="line">Line</button>
+                            <button class="chart-type" data-type="area">Area</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="stock-chart"></div>
+                <div class="chart-indicators">
+                    <label><input type="checkbox" id="show-volume" checked> Volume</label>
+                    <label><input type="checkbox" id="show-ma"> Moving Averages</label>
+                    <label><input type="checkbox" id="show-rsi"> RSI</label>
+                    <label><input type="checkbox" id="show-macd"> MACD</label>
+                </div>
+            </div>
+
+            <!-- Positions -->
+            <div class="card positions-card">
+                <h2>Open Positions</h2>
+                <table id="positions-table">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Shares</th>
+                            <th>Avg Cost</th>
+                            <th>Current</th>
+                            <th>P&L</th>
+                            <th>P&L %</th>
+                            <th>Value</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="positions-body">
+                        <tr>
+                            <td>TSLA</td>
+                            <td>100</td>
+                            <td>$220.00</td>
+                            <td>$245.00</td>
+                            <td class="positive">+$2,500</td>
+                            <td class="positive">+11.4%</td>
+                            <td>$24,500</td>
+                            <td>
+                                <button class="btn btn-small btn-sell">Sell</button>
+                                <button class="btn btn-small">Add</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Stock Analysis -->
+            <div class="card analysis-card">
+                <h2>Stock Analysis</h2>
+                <div class="analysis-tabs">
+                    <button class="tab active" data-tab="fundamental">Fundamental</button>
+                    <button class="tab" data-tab="technical">Technical</button>
+                    <button class="tab" data-tab="sentiment">Sentiment</button>
+                    <button class="tab" data-tab="options">Options</button>
+                </div>
+                <div class="analysis-content">
+                    <div id="fundamental-analysis" class="tab-content active">
+                        <div class="fundamental-grid">
+                            <div class="fundamental-item">
+                                <span>P/E Ratio</span>
+                                <strong>28.5</strong>
+                            </div>
+                            <div class="fundamental-item">
+                                <span>Market Cap</span>
+                                <strong>$2.8T</strong>
+                            </div>
+                            <div class="fundamental-item">
+                                <span>EPS</span>
+                                <strong>$6.13</strong>
+                            </div>
+                            <div class="fundamental-item">
+                                <span>Dividend Yield</span>
+                                <strong>0.5%</strong>
+                            </div>
+                            <div class="fundamental-item">
+                                <span>Beta</span>
+                                <strong>1.25</strong>
+                            </div>
+                            <div class="fundamental-item">
+                                <span>ROE</span>
+                                <strong>147%</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="technical-analysis" class="tab-content">
+                        <div class="technical-indicators">
+                            <div class="indicator">
+                                <span>RSI (14)</span>
+                                <strong>58</strong>
+                                <span class="indicator-signal neutral">Neutral</span>
+                            </div>
+                            <div class="indicator">
+                                <span>MACD</span>
+                                <strong>0.85</strong>
+                                <span class="indicator-signal buy">Bullish</span>
+                            </div>
+                            <div class="indicator">
+                                <span>20 SMA</span>
+                                <strong>$176.50</strong>
+                                <span class="indicator-signal buy">Above</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="sentiment-analysis" class="tab-content">
+                        <div class="sentiment-scores">
+                            <div class="sentiment-item">
+                                <span>News Sentiment</span>
+                                <div class="sentiment-bar">
+                                    <div class="sentiment-fill positive" style="width: 75%"></div>
+                                </div>
+                                <strong>75% Positive</strong>
+                            </div>
+                            <div class="sentiment-item">
+                                <span>Analyst Rating</span>
+                                <strong class="rating">Strong Buy</strong>
+                                <span>32 Buy, 8 Hold, 2 Sell</span>
+                            </div>
+                            <div class="sentiment-item">
+                                <span>Social Sentiment</span>
+                                <div class="sentiment-bar">
+                                    <div class="sentiment-fill positive" style="width: 68%"></div>
+                                </div>
+                                <strong>68% Bullish</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="options-analysis" class="tab-content">
+                        <div class="options-chain">
+                            <h3>Options Chain</h3>
+                            <div class="options-stats">
+                                <div>Put/Call Ratio: <strong>0.65</strong></div>
+                                <div>IV Rank: <strong>35%</strong></div>
+                                <div>IV Percentile: <strong>42%</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sector Performance -->
+            <div class="card sector-card">
+                <h2>Sector Performance</h2>
+                <div class="sector-grid">
+                    <div class="sector-item positive">
+                        <span>Technology</span>
+                        <strong>+1.8%</strong>
+                    </div>
+                    <div class="sector-item positive">
+                        <span>Healthcare</span>
+                        <strong>+0.9%</strong>
+                    </div>
+                    <div class="sector-item negative">
+                        <span>Energy</span>
+                        <strong>-1.2%</strong>
+                    </div>
+                    <div class="sector-item positive">
+                        <span>Financials</span>
+                        <strong>+0.5%</strong>
+                    </div>
+                    <div class="sector-item negative">
+                        <span>Real Estate</span>
+                        <strong>-0.8%</strong>
+                    </div>
+                    <div class="sector-item positive">
+                        <span>Consumer</span>
+                        <strong>+0.3%</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Events -->
+            <div class="card events-card">
+                <h2>Upcoming Events</h2>
+                <div class="events-list">
+                    <div class="event-item">
+                        <div class="event-date">Jan 25</div>
+                        <div class="event-details">
+                            <strong>AAPL Earnings</strong>
+                            <span>After Market Close</span>
+                        </div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-date">Jan 26</div>
+                        <div class="event-details">
+                            <strong>Fed Meeting</strong>
+                            <span>2:00 PM EST</span>
+                        </div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-date">Jan 28</div>
+                        <div class="event-details">
+                            <strong>GDP Report</strong>
+                            <span>8:30 AM EST</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Entry -->
+            <div class="card order-card">
+                <h2>Place Order</h2>
+                <div class="order-form">
+                    <div class="form-row">
+                        <input type="text" id="order-symbol" placeholder="Symbol" />
+                        <select id="order-type">
+                            <option value="market">Market</option>
+                            <option value="limit">Limit</option>
+                            <option value="stop">Stop</option>
+                            <option value="stop_limit">Stop Limit</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <input type="number" id="order-quantity" placeholder="Shares" />
+                        <input type="number" id="order-price" placeholder="Price" step="0.01" />
+                    </div>
+                    <div class="form-row">
+                        <select id="order-tif">
+                            <option value="day">Day</option>
+                            <option value="gtc">GTC</option>
+                            <option value="ioc">IOC</option>
+                            <option value="fok">FOK</option>
+                        </select>
+                        <div class="order-buttons">
+                            <button class="btn btn-buy" onclick="placeOrder('buy')">Buy</button>
+                            <button class="btn btn-sell" onclick="placeOrder('sell')">Sell</button>
+                        </div>
+                    </div>
+                    <div class="order-preview">
+                        <span>Est. Total: </span>
+                        <strong id="order-total">$0.00</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Neural Stock Trader | Real-time Stock Trading with AI Analysis</p>
+            <p class="disclaimer">Trading stocks involves risk. Past performance does not guarantee future results.</p>
+        </footer>
+    </div>
+
+    <script src="stocks.js"></script>
+</body>
+</html>
