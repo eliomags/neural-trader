@@ -59,6 +59,13 @@ export class DataFeedManager extends EventEmitter {
   }
 
   private async initWebSocket(symbol: string): Promise<void> {
+    // Skip WebSocket in paper trading mode
+    const exchange = this.exchangeManager.getExchange();
+    if (exchange.apiKey === 'paper_trading') {
+      this.logger.debug(`Skipping WebSocket for ${symbol} in paper trading mode`);
+      return;
+    }
+
     const streamName = this.getStreamName(symbol);
     const wsUrl = `wss://stream.binance.com:9443/ws/${streamName}`;
 

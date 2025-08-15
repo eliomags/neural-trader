@@ -26,9 +26,11 @@ fi
 
 # Start the application
 echo "🚀 Starting Neural Trader..."
-echo "📊 Dashboard will be available at http://localhost:3000"
+echo "📊 Dashboards will be available at:"
+echo "   💹 Crypto: http://localhost:3001"
+echo "   📈 Stocks: http://localhost:3001/stocks.html"
 echo ""
 echo "Press Ctrl+C to stop"
 echo ""
 
-npm start
+PORT=3001 npm start

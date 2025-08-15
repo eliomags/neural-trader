@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'http://localhost:3001/api';
 let socket;
 let equityChart;
 let isTrading = false;
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeWebSocket() {
-    socket = io('http://localhost:3000');
+    socket = io('http://localhost:3001');
     
     socket.on('connect', () => {
         document.getElementById('connection-status').classList.add('connected');
@@ -138,14 +138,27 @@ function updateBalance(balance) {
 }
 
 function updatePerformance(performance) {
-    document.getElementById('win-rate').textContent = `${(performance.winRate * 100).toFixed(1)}%`;
-    document.getElementById('sharpe-ratio').textContent = performance.sharpeRatio.toFixed(2);
-    document.getElementById('max-drawdown').textContent = `${(performance.maxDrawdown * 100).toFixed(1)}%`;
-    document.getElementById('profit-factor').textContent = performance.profitFactor.toFixed(2);
+    // Handle undefined or null performance object
+    if (!performance) {
+        performance = {
+            winRate: 0,
+            sharpeRatio: 0,
+            maxDrawdown: 0,
+            profitFactor: 0,
+            totalPnL: 0
+        };
+    }
+    
+    // Update metrics with null checks
+    document.getElementById('win-rate').textContent = `${((performance.winRate || 0) * 100).toFixed(1)}%`;
+    document.getElementById('sharpe-ratio').textContent = (performance.sharpeRatio || 0).toFixed(2);
+    document.getElementById('max-drawdown').textContent = `${((performance.maxDrawdown || 0) * 100).toFixed(1)}%`;
+    document.getElementById('profit-factor').textContent = (performance.profitFactor || 0).toFixed(2);
     
     const pnlElement = document.getElementById('pnl');
-    pnlElement.textContent = `$${performance.totalPnL.toFixed(2)}`;
-    pnlElement.className = performance.totalPnL >= 0 ? 'pnl-value positive' : 'pnl-value negative';
+    const totalPnL = performance.totalPnL || 0;
+    pnlElement.textContent = `$${totalPnL.toFixed(2)}`;
+    pnlElement.className = totalPnL >= 0 ? 'pnl-value positive' : 'pnl-value negative';
     
     // Update equity chart
     if (equityChart && performance.equityCurve) {

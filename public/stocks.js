@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'http://localhost:3001/api';
 let socket;
 let chart;
 let currentSymbol = 'AAPL';
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeWebSocket() {
-    socket = io('http://localhost:3000');
+    socket = io('http://localhost:3001');
     
     socket.on('connect', () => {
         console.log('Connected to server');

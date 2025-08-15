@@ -196,21 +196,57 @@ export class PortfolioManager extends EventEmitter {
     const grossProfit = winningTrades.reduce((sum, t) => sum + t.pnl, 0);
     const grossLoss = Math.abs(losingTrades.reduce((sum, t) => sum + t.pnl, 0));
     
+    // Calculate Sharpe Ratio
+    const returns = trades.map(t => t.pnl);
+    const avgReturn = returns.length > 0 ? returns.reduce((a, b) => a + b, 0) / returns.length : 0;
+    const variance = returns.length > 0 
+      ? returns.reduce((sum, ret) => sum + Math.pow(ret - avgReturn, 2), 0) / returns.length 
+      : 0;
+    const stdDev = Math.sqrt(variance);
+    const sharpeRatio = stdDev > 0 ? (avgReturn / stdDev) * Math.sqrt(252) : 0; // Annualized
+    
+    // Calculate Max Drawdown
+    let peak = 0;
+    let maxDrawdown = 0;
+    let runningTotal = 0;
+    
+    for (const trade of trades) {
+      runningTotal += trade.pnl;
+      if (runningTotal > peak) {
+        peak = runningTotal;
+      }
+      const drawdown = peak > 0 ? (peak - runningTotal) / peak : 0;
+      if (drawdown > maxDrawdown) {
+        maxDrawdown = drawdown;
+      }
+    }
+    
+    // Calculate equity curve
+    const equityCurve = [];
+    let equity = 10000; // Starting equity
+    for (const trade of trades) {
+      equity += trade.pnl;
+      equityCurve.push(equity);
+    }
+
     return {
       totalTrades: trades.length,
       winningTrades: winningTrades.length,
       losingTrades: losingTrades.length,
-      winRate: winningTrades.length / trades.length,
+      winRate: trades.length > 0 ? winningTrades.length / trades.length : 0,
       totalPnL,
-      averagePnL: totalPnL / trades.length,
-      bestTrade: Math.max(...trades.map(t => t.pnl)),
-      worstTrade: Math.min(...trades.map(t => t.pnl)),
-      profitFactor: grossLoss > 0 ? grossProfit / grossLoss : grossProfit,
-      expectancy: totalPnL / trades.length,
+      averagePnL: trades.length > 0 ? totalPnL / trades.length : 0,
+      bestTrade: trades.length > 0 ? Math.max(...trades.map(t => t.pnl)) : 0,
+      worstTrade: trades.length > 0 ? Math.min(...trades.map(t => t.pnl)) : 0,
+      profitFactor: grossLoss > 0 ? grossProfit / grossLoss : 0,
+      expectancy: trades.length > 0 ? totalPnL / trades.length : 0,
       averageWin: winningTrades.length > 0 
         ? grossProfit / winningTrades.length : 0,
       averageLoss: losingTrades.length > 0 
-        ? grossLoss / losingTrades.length : 0
+        ? grossLoss / losingTrades.length : 0,
+      sharpeRatio,
+      maxDrawdown,
+      equityCurve
     };
   }
 

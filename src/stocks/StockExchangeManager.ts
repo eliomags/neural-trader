@@ -56,7 +56,7 @@ export class StockExchangeManager {
 
   private initializeDataFeeds(): void {
     // Finnhub WebSocket for real-time data
-    if (process.env.FINNHUB_API_KEY) {
+    if (process.env.FINNHUB_API_KEY && process.env.FINNHUB_API_KEY !== 'your_finnhub_api_key') {
       this.finnhubWs = new WebSocket(`wss://ws.finnhub.io?token=${process.env.FINNHUB_API_KEY}`);
       
       this.finnhubWs.on('open', () => {
@@ -69,7 +69,7 @@ export class StockExchangeManager {
     }
 
     // Polygon.io WebSocket for market data
-    if (process.env.POLYGON_API_KEY) {
+    if (process.env.POLYGON_API_KEY && process.env.POLYGON_API_KEY !== 'your_polygon_api_key') {
       this.polygonWs = new WebSocket(`wss://socket.polygon.io/stocks`);
       
       this.polygonWs.on('open', () => {
