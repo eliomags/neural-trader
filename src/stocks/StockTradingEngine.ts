@@ -129,7 +129,7 @@ export class StockTradingEngine extends EventEmitter {
     await this.discoverNewStocks();
   }
 
-  private async validateSignal(signal: StockSignal): boolean {
+  private async validateSignal(signal: StockSignal): Promise<boolean> {
     // Check existing positions
     const positions = await this.exchangeManager.getPositions();
     const hasPosition = positions.some(p => p.symbol === signal.symbol);

@@ -36,6 +36,7 @@ export interface StockSignal {
   targetPrice: number;
   stopLoss: number;
   timeHorizon: string;
+  timestamp?: number;
 }
 
 export class StockAnalyzer {
@@ -342,7 +343,8 @@ export class StockAnalyzer {
       reasons,
       targetPrice,
       stopLoss,
-      timeHorizon: fundamentalScore > technicalScore ? 'Long-term' : 'Short-term'
+      timeHorizon: fundamentalScore > technicalScore ? 'Long-term' : 'Short-term',
+      timestamp: Date.now()
     };
   }
 

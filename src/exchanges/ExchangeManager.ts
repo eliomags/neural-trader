@@ -4,7 +4,7 @@ import { ExchangeConfig, OrderType, OrderSide } from '../types';
 
 export class ExchangeManager {
   private logger: Logger;
-  private exchanges: Map<string, ccxt.Exchange> = new Map();
+  private exchanges: Map<string, any> = new Map();
   private activeExchange: string = 'binance';
 
   constructor() {
@@ -84,7 +84,7 @@ export class ExchangeManager {
     this.logger.info('Paper trading exchange initialized');
   }
 
-  private async testConnection(exchange: ccxt.Exchange, name: string): Promise<void> {
+  private async testConnection(exchange: any, name: string): Promise<void> {
     try {
       await exchange.loadMarkets();
       const balance = await exchange.fetchBalance();
@@ -94,7 +94,7 @@ export class ExchangeManager {
     }
   }
 
-  getExchange(name?: string): ccxt.Exchange {
+  getExchange(name?: string): any {
     const exchangeName = name || this.activeExchange;
     const exchange = this.exchanges.get(exchangeName);
     

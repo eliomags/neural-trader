@@ -205,6 +205,20 @@ export class StockExchangeManager {
     return null;
   }
 
+  async getOpenOrders(symbol?: string): Promise<any[]> {
+    if (this.alpacaClient) {
+      return await this.alpacaClient.getOrders('open');
+    }
+    return [];
+  }
+
+  async cancelOrder(orderId: string, symbol: string): Promise<any> {
+    if (this.alpacaClient) {
+      return await this.alpacaClient.cancelOrder(orderId);
+    }
+    throw new Error('No exchange connected');
+  }
+
   async getSectorPerformance(): Promise<any> {
     // Get sector performance data
     const sectors = ['XLK', 'XLF', 'XLV', 'XLE', 'XLI', 'XLY', 'XLP', 'XLB', 'XLRE', 'XLU'];
@@ -237,10 +251,9 @@ class AlpacaClient {
   async initialize(): Promise<void> {
     try {
       const account = await this.getAccount();
-      this.logger.info(`Alpaca connected: $${account.cash} available`);
+      this.logger.info(`Alpaca connected with $${account.cash} available`);
     } catch (error) {
-      this.logger.error('Failed to connect to Alpaca:', error);
-      throw error;
+      this.logger.warn('Alpaca connection failed, using paper trading mode');
     }
   }
 

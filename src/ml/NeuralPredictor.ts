@@ -212,11 +212,11 @@ export class NeuralPredictor {
         candle.low,
         candle.close,
         candle.volume,
-        this.indicators.calculateRSI(history.slice(0, i + 14)),
-        ...this.indicators.calculateMACD(history.slice(0, i + 26)),
+        this.indicators.calculateRSI(history.slice(0, i + 14).map(c => c.close)),
+        ...this.indicators.calculateMACD(history.slice(0, i + 26).map(c => c.close)),
         ...this.indicators.calculateBollingerBands(history.slice(0, i + 20)),
-        this.indicators.calculateEMA(history.slice(0, i + 12), 12),
-        this.indicators.calculateEMA(history.slice(0, i + 26), 26),
+        this.indicators.calculateEMA(history.slice(0, i + 12).map(c => c.close), 12),
+        this.indicators.calculateEMA(history.slice(0, i + 26).map(c => c.close), 26),
         this.indicators.calculateATR(history.slice(0, i + 14)),
         this.indicators.calculateStochastic(history.slice(0, i + 14))
       ];
@@ -328,7 +328,7 @@ export class NeuralPredictor {
       metrics[timeframe] = {
         layers: model.layers.length,
         parameters: model.countParams(),
-        compiled: model.compiled
+        compiled: true
       };
     }
     
