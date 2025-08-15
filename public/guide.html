@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Trader - Complete User Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .guide-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .guide-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .guide-header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .guide-header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            color: white;
+        }
+
+        .navigation-bar {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            color: #667eea;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .nav-button:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .toc {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toc h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin: 10px 0;
+        }
+
+        .toc a {
+            color: #a0a0a0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #667eea;
+        }
+
+        .toc a::before {
+            content: "→";
+            margin-right: 10px;
+            color: #667eea;
+        }
+
+        .guide-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .guide-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .guide-section h3 {
+            color: #9ca3ea;
+            margin: 25px 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .guide-section h4 {
+            color: #b8bfff;
+            margin: 20px 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        .warning-box {
+            background: rgba(255, 193, 7, 0.1);
+            border: 2px solid rgba(255, 193, 7, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning-box h4 {
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+
+        .info-box {
+            background: rgba(33, 150, 243, 0.1);
+            border: 2px solid rgba(33, 150, 243, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .info-box h4 {
+            color: #2196f3;
+            margin-bottom: 10px;
+        }
+
+        .success-box {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .success-box h4 {
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background: #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            color: #4caf50;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .api-table th {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .api-table td {
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .api-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ul {
+            padding-left: 30px;
+            margin: 10px 0;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin: 0 5px;
+        }
+
+        .badge-paper {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+
+        .badge-live {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .badge-beta {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196f3;
+            border: 1px solid #2196f3;
+        }
+
+        @media (max-width: 768px) {
+            .guide-header h1 {
+                font-size: 2em;
+            }
+            
+            .guide-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="guide-container">
+        <!-- Header -->
+        <div class="guide-header">
+            <h1>🧠 Neural Trader</h1>
+            <p>Complete User Guide & Documentation</p>
+            <p style="margin-top: 10px; font-size: 1em; opacity: 0.9;">Version 2.5.0 - AI-Powered Trading Platform</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation-bar">
+            <a href="/" class="nav-button">💹 Crypto Dashboard</a>
+            <a href="/stocks.html" class="nav-button">📈 Stock Dashboard</a>
+            <a href="#quick-start" class="nav-button">🚀 Quick Start</a>
+            <a href="#api-setup" class="nav-button">🔑 API Setup</a>
+            <a href="#features" class="nav-button">✨ Features</a>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2>📚 Table of Contents</h2>
+            <ul>
+                <li><a href="#overview">System Overview</a></li>
+                <li><a href="#quick-start">Quick Start Guide</a></li>
+                <li><a href="#paper-trading">Paper Trading Mode</a></li>
+                <li><a href="#live-trading">Live Trading Setup</a></li>
+                <li><a href="#api-setup">API Keys & Configuration</a></li>
+                <li><a href="#features">Features & Capabilities</a></li>
+                <li><a href="#crypto-trading">Cryptocurrency Trading</a></li>
+                <li><a href="#stock-trading">Stock Market Trading</a></li>
+                <li><a href="#ml-engine">Machine Learning Engine</a></li>
+                <li><a href="#risk-management">Risk Management</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#faq">Frequently Asked Questions</a></li>
+            </ul>
+        </div>
+
+        <!-- System Overview -->
+        <div class="guide-section" id="overview">
+            <h2>System Overview</h2>
+            
+            <div class="info-box">
+                <h4>🎯 What is Neural Trader?</h4>
+                <p>Neural Trader is an advanced, AI-powered trading platform that combines machine learning, technical analysis, and automated execution to trade both cryptocurrencies and stocks. The system uses LSTM neural networks, ensemble learning, and sophisticated risk management to make intelligent trading decisions.</p>
+            </div>
+
+            <h3>Key Components</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🧠 Neural Network Engine</h4>
+                    <p>LSTM-based deep learning models that analyze market patterns and predict price movements with ensemble voting for improved accuracy.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Technical Analysis</h4>
+                    <p>20+ technical indicators including RSI, MACD, Bollinger Bands, Moving Averages, and custom proprietary indicators.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💱 Multi-Exchange Support</h4>
+                    <p>Connects to multiple exchanges: Binance, Coinbase, Kraken for crypto; Alpaca, Interactive Brokers for stocks.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚡ Real-Time Execution</h4>
+                    <p>WebSocket connections for live market data, instant order execution, and real-time portfolio updates.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🛡️ Risk Management</h4>
+                    <p>Kelly Criterion position sizing, correlation analysis, stop-loss/take-profit, and maximum drawdown protection.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📈 Performance Analytics</h4>
+                    <p>Sharpe ratio, win rate, profit factor, maximum drawdown, and comprehensive trade history tracking.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Start Guide -->
+        <div class="guide-section" id="quick-start">
+            <h2>Quick Start Guide</h2>
+            
+            <div class="success-box">
+                <h4>✅ Default Mode: Paper Trading</h4>
+                <p>The system starts in <strong>Paper Trading Mode</strong> by default. This means:</p>
+                <ul>
+                    <li>No real money is at risk</li>
+                    <li>You can test all features safely</li>
+                    <li>Perfect for learning and strategy testing</li>
+                    <li>Uses simulated market data and executions</li>
+                </ul>
+            </div>
+
+            <h3>Getting Started in 5 Minutes</h3>
+            
+            <p><span class="step-number">1</span> <strong>Start the Application</strong></p>
+            <div class="code-block">
+./start.sh
+            </div>
+            <p>This will install dependencies, build the project, and start the server on port 3001.</p>
+
+            <p><span class="step-number">2</span> <strong>Access the Dashboards</strong></p>
+            <ul>
+                <li><strong>Crypto Trading:</strong> <a href="http://localhost:3001" style="color: #667eea;">http://localhost:3001</a></li>
+                <li><strong>Stock Trading:</strong> <a href="http://localhost:3001/stocks.html" style="color: #667eea;">http://localhost:3001/stocks.html</a></li>
+                <li><strong>This Guide:</strong> <a href="http://localhost:3001/guide.html" style="color: #667eea;">http://localhost:3001/guide.html</a></li>
+            </ul>
+
+            <p><span class="step-number">3</span> <strong>Explore Paper Trading</strong></p>
+            <p>Click "Start Trading" to begin paper trading. The system will:</p>
+            <ul>
+                <li>Generate simulated market data</li>
+                <li>Make trading decisions using AI models</li>
+                <li>Execute paper trades</li>
+                <li>Track performance metrics</li>
+            </ul>
+
+            <p><span class="step-number">4</span> <strong>Monitor Performance</strong></p>
+            <p>Watch the dashboards update in real-time with:</p>
+            <ul>
+                <li>Portfolio value and P&L</li>
+                <li>Open positions</li>
+                <li>Trading signals</li>
+                <li>Performance metrics</li>
+            </ul>
+        </div>
+
+        <!-- Paper Trading Mode -->
+        <div class="guide-section" id="paper-trading">
+            <h2>Paper Trading Mode <span class="badge badge-paper">DEFAULT</span></h2>
+            
+            <p>Paper trading is the safest way to test the system and understand its capabilities without financial risk.</p>
+
+            <h3>What Works in Paper Trading?</h3>
+            <ul>
+                <li>✅ All AI/ML models and predictions</li>
+                <li>✅ Technical analysis and indicators</li>
+                <li>✅ Risk management calculations</li>
+                <li>✅ Position sizing algorithms</li>
+                <li>✅ Performance tracking</li>
+                <li>✅ Strategy backtesting</li>
+                <li>✅ WebSocket connections (simulated)</li>
+                <li>✅ Order execution (simulated)</li>
+            </ul>
+
+            <h3>Paper Trading Features</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Simulated Market Data</h4>
+                    <p>Realistic price movements based on historical patterns and volatility models.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Virtual Portfolio</h4>
+                    <p>Start with $10,000 virtual balance to test strategies.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Real AI Decisions</h4>
+                    <p>The same neural networks and algorithms used in live trading.</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h4>💡 Tip: Test Before Going Live</h4>
+                <p>We recommend running in paper trading mode for at least 1-2 weeks to:</p>
+                <ul>
+                    <li>Understand the system's trading behavior</li>
+                    <li>Fine-tune risk parameters</li>
+                    <li>Verify your API configurations</li>
+                    <li>Build confidence in the platform</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Live Trading Setup -->
+        <div class="guide-section" id="live-trading">
+            <h2>Live Trading Setup <span class="badge badge-live">ADVANCED</span></h2>
+            
+            <div class="warning-box">
+                <h4>⚠️ Important Warning</h4>
+                <p><strong>Live trading involves real money and financial risk.</strong> Only proceed if you:</p>
+                <ul>
+                    <li>Understand the risks involved in automated trading</li>
+                    <li>Have tested thoroughly in paper trading mode</li>
+                    <li>Can afford to lose the capital you're trading with</li>
+                    <li>Have proper API keys from supported exchanges</li>
+                </ul>
+            </div>
+
+            <h3>Transitioning to Live Trading</h3>
+
+            <p><span class="step-number">1</span> <strong>Obtain API Keys</strong></p>
+            <p>Get API keys from your chosen exchanges (see API Setup section below).</p>
+
+            <p><span class="step-number">2</span> <strong>Configure Environment</strong></p>
+            <p>Edit the <code>.env</code> file in the project root:</p>
+            <div class="code-block">
+# Set to 'live' for real trading
+TRADING_MODE=live
+
+# Add your API keys (see API Setup section)
+BINANCE_API_KEY=your_key_here
+BINANCE_SECRET_KEY=your_secret_here
+# ... more keys
+            </div>
+
+            <p><span class="step-number">3</span> <strong>Set Risk Parameters</strong></p>
+            <p>Configure risk management in <code>config/trading.json</code>:</p>
+            <div class="code-block">
+{
+  "maxPositionSize": 0.1,      // Max 10% per position
+  "maxDrawdown": 0.2,           // Stop at 20% drawdown
+  "stopLossPercent": 0.05,      // 5% stop loss
+  "takeProfitPercent": 0.15     // 15% take profit
+}
+            </div>
+
+            <p><span class="step-number">4</span> <strong>Start with Small Capital</strong></p>
+            <p>Begin with a small amount to verify everything works correctly.</p>
+
+            <p><span class="step-number">5</span> <strong>Monitor Closely</strong></p>
+            <p>Watch the system carefully during the first few days of live trading.</p>
+        </div>
+
+        <!-- API Setup -->
+        <div class="guide-section" id="api-setup">
+            <h2>API Keys & Configuration</h2>
+            
+            <p>To enable live trading and real market data, you need API keys from supported platforms.</p>
+
+            <h3>Cryptocurrency Exchanges</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Exchange</th>
+                        <th>Required Keys</th>
+                        <th>How to Obtain</th>
+                        <th>Features</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Binance</strong></td>
+                        <td>
+                            <code>BINANCE_API_KEY</code><br>
+                            <code>BINANCE_SECRET_KEY</code>
+                        </td>
+                        <td>
+                            1. Log in to Binance<br>
+                            2. Go to API Management<br>
+                            3. Create new API key<br>
+                            4. Enable trading permissions
+                        </td>
+                        <td>
+                            • Spot trading<br>
+                            • Real-time data<br>
+                            • 100+ pairs<br>
+                            • Low fees
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Coinbase</strong></td>
+                        <td>
+                            <code>COINBASE_API_KEY</code><br>
+                            <code>COINBASE_SECRET_KEY</code><br>
+                            <code>COINBASE_PASSPHRASE</code>
+                        </td>
+                        <td>
+                            1. Log in to Coinbase Pro<br>
+                            2. Go to API Settings<br>
+                            3. Create new API key<br>
+                            4. Save passphrase securely
+                        </td>
+                        <td>
+                            • US-compliant<br>
+                            • Fiat support<br>
+                            • Institutional grade<br>
+                            • Insurance
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kraken</strong></td>
+                        <td>
+                            <code>KRAKEN_API_KEY</code><br>
+                            <code>KRAKEN_SECRET_KEY</code>
+                        </td>
+                        <td>
+                            1. Log in to Kraken<br>
+                            2. Go to API tab<br>
+                            3. Generate new key<br>
+                            4. Set permissions
+                        </td>
+                        <td>
+                            • High security<br>
+                            • Margin trading<br>
+                            • Staking<br>
+                            • Futures
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Stock Brokers</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Broker</th>
+                        <th>Required Keys</th>
+                        <th>How to Obtain</th>
+                        <th>Features</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Alpaca</strong></td>
+                        <td>
+                            <code>ALPACA_KEY_ID</code><br>
+                            <code>ALPACA_SECRET_KEY</code><br>
+                            <code>ALPACA_PAPER</code> (true/false)
+                        </td>
+                        <td>
+                            1. Sign up at Alpaca<br>
+                            2. Go to API Keys<br>
+                            3. Generate keys<br>
+                            4. Note: Free paper trading available
+                        </td>
+                        <td>
+                            • Commission-free<br>
+                            • Paper trading<br>
+                            • Fractional shares<br>
+                            • Extended hours
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Interactive Brokers</strong></td>
+                        <td>
+                            <code>IBKR_USERNAME</code><br>
+                            <code>IBKR_PASSWORD</code><br>
+                            <code>IBKR_ACCOUNT</code>
+                        </td>
+                        <td>
+                            1. Open IBKR account<br>
+                            2. Enable API access<br>
+                            3. Configure TWS/Gateway<br>
+                            4. Set connection parameters
+                        </td>
+                        <td>
+                            • Global markets<br>
+                            • Options<br>
+                            • Forex<br>
+                            • Professional tools
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Market Data Providers</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Provider</th>
+                        <th>Required Keys</th>
+                        <th>Purpose</th>
+                        <th>Pricing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Polygon.io</strong></td>
+                        <td><code>POLYGON_API_KEY</code></td>
+                        <td>Real-time stock market data</td>
+                        <td>Free tier available</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Finnhub</strong></td>
+                        <td><code>FINNHUB_API_KEY</code></td>
+                        <td>Stock fundamentals & news</td>
+                        <td>Free tier available</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alpha Vantage</strong></td>
+                        <td><code>ALPHA_VANTAGE_KEY</code></td>
+                        <td>Technical indicators</td>
+                        <td>Free with limits</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h4>🔐 Security Best Practices</h4>
+                <ul>
+                    <li>Never commit API keys to version control</li>
+                    <li>Use read-only keys when possible for data feeds</li>
+                    <li>Enable IP whitelisting on exchange APIs</li>
+                    <li>Set withdrawal limits on exchange accounts</li>
+                    <li>Use 2FA on all exchange accounts</li>
+                    <li>Regularly rotate API keys</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="guide-section" id="features">
+            <h2>Features & Capabilities</h2>
+
+            <h3>Core Trading Features</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>📊 Multi-Asset Support</h4>
+                    <ul>
+                        <li>Cryptocurrencies (BTC, ETH, 100+ altcoins)</li>
+                        <li>Stocks (US equities)</li>
+                        <li>ETFs and Index funds</li>
+                        <li>Coming soon: Options, Forex</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🤖 AI/ML Models</h4>
+                    <ul>
+                        <li>LSTM neural networks</li>
+                        <li>Ensemble learning</li>
+                        <li>Pattern recognition</li>
+                        <li>Sentiment analysis</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>📈 Technical Analysis</h4>
+                    <ul>
+                        <li>20+ indicators</li>
+                        <li>Custom strategies</li>
+                        <li>Multi-timeframe analysis</li>
+                        <li>Chart pattern detection</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>⚡ Execution</h4>
+                    <ul>
+                        <li>Market orders</li>
+                        <li>Limit orders</li>
+                        <li>Stop-loss/Take-profit</li>
+                        <li>Trailing stops</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>📱 Real-Time Updates</h4>
+                    <ul>
+                        <li>WebSocket connections</li>
+                        <li>Live price feeds</li>
+                        <li>Instant notifications</li>
+                        <li>Portfolio tracking</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Analytics</h4>
+                    <ul>
+                        <li>Performance metrics</li>
+                        <li>Risk analysis</li>
+                        <li>Trade history</li>
+                        <li>Profit/Loss tracking</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Advanced Features</h3>
+            <ul>
+                <li><strong>Portfolio Optimization:</strong> Modern Portfolio Theory implementation with correlation analysis</li>
+                <li><strong>Risk Management:</strong> Kelly Criterion, Value at Risk (VaR), position sizing</li>
+                <li><strong>Backtesting:</strong> Historical strategy testing with walk-forward analysis</li>
+                <li><strong>News Integration:</strong> Sentiment analysis from financial news sources</li>
+                <li><strong>Market Hours:</strong> Automatic handling of market sessions and holidays</li>
+                <li><strong>Multi-Exchange Arbitrage:</strong> Identify and execute arbitrage opportunities</li>
+            </ul>
+        </div>
+
+        <!-- Crypto Trading -->
+        <div class="guide-section" id="crypto-trading">
+            <h2>Cryptocurrency Trading</h2>
+
+            <h3>Supported Cryptocurrencies</h3>
+            <p>The system trades major pairs including:</p>
+            <ul>
+                <li>BTC/USDT - Bitcoin</li>
+                <li>ETH/USDT - Ethereum</li>
+                <li>BNB/USDT - Binance Coin</li>
+                <li>SOL/USDT - Solana</li>
+                <li>ADA/USDT - Cardano</li>
+                <li>DOT/USDT - Polkadot</li>
+                <li>MATIC/USDT - Polygon</li>
+                <li>And 50+ more altcoins</li>
+            </ul>
+
+            <h3>Crypto-Specific Features</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>24/7 Trading</h4>
+                    <p>Cryptocurrency markets never close. The system monitors and trades continuously.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Volatility Management</h4>
+                    <p>Special algorithms to handle crypto's high volatility with dynamic position sizing.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>DeFi Integration</h4>
+                    <p>Coming soon: Yield farming, liquidity provision, and DeFi protocol integration.</p>
+                </div>
+            </div>
+
+            <h3>Using the Crypto Dashboard</h3>
+            <ol>
+                <li><strong>Portfolio Overview:</strong> View total value, available balance, and P&L</li>
+                <li><strong>Active Positions:</strong> Monitor open trades with real-time P&L</li>
+                <li><strong>Trading Signals:</strong> AI-generated buy/sell signals with confidence scores</li>
+                <li><strong>Performance Metrics:</strong> Track win rate, Sharpe ratio, and drawdown</li>
+                <li><strong>Trade History:</strong> Review past trades and their outcomes</li>
+            </ol>
+        </div>
+
+        <!-- Stock Trading -->
+        <div class="guide-section" id="stock-trading">
+            <h2>Stock Market Trading</h2>
+
+            <h3>Market Coverage</h3>
+            <ul>
+                <li><strong>US Equities:</strong> NYSE, NASDAQ, AMEX</li>
+                <li><strong>ETFs:</strong> SPY, QQQ, sector ETFs</li>
+                <li><strong>Market Hours:</strong> 9:30 AM - 4:00 PM ET (automatic handling)</li>
+                <li><strong>Extended Hours:</strong> Pre-market and after-hours trading (if enabled)</li>
+            </ul>
+
+            <h3>Stock-Specific Features</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Fundamental Analysis</h4>
+                    <p>P/E ratios, earnings, market cap, dividends, and financial metrics.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Sector Rotation</h4>
+                    <p>Track sector performance and rotate positions based on market conditions.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Options Support</h4>
+                    <p>Coming soon: Options trading with Greeks calculation and strategies.</p>
+                </div>
+            </div>
+
+            <h3>Using the Stock Dashboard</h3>
+            <ol>
+                <li><strong>Market Status:</strong> See if markets are open/closed with countdown</li>
+                <li><strong>Indices:</strong> Track S&P 500, NASDAQ, DOW, VIX</li>
+                <li><strong>Watchlist:</strong> Monitor your favorite stocks with signals</li>
+                <li><strong>Order Entry:</strong> Place market/limit orders with one click</li>
+                <li><strong>Sector Performance:</strong> View sector rotation opportunities</li>
+            </ol>
+        </div>
+
+        <!-- ML Engine -->
+        <div class="guide-section" id="ml-engine">
+            <h2>Machine Learning Engine</h2>
+
+            <h3>Neural Network Architecture</h3>
+            <div class="code-block">
+Model: LSTM (Long Short-Term Memory)
+Layers: 3 LSTM layers + 2 Dense layers
+Features: 50+ market indicators
+Training: Continuous online learning
+Ensemble: 5 models with voting mechanism
+            </div>
+
+            <h3>How It Works</h3>
+            <ol>
+                <li><strong>Data Collection:</strong> Gather price, volume, and indicator data</li>
+                <li><strong>Feature Engineering:</strong> Calculate technical indicators and patterns</li>
+                <li><strong>Prediction:</strong> Neural network predicts price movement</li>
+                <li><strong>Signal Generation:</strong> Convert predictions to trading signals</li>
+                <li><strong>Risk Assessment:</strong> Evaluate position size and risk</li>
+                <li><strong>Execution:</strong> Place orders based on signals and risk</li>
+            </ol>
+
+            <h3>Model Performance</h3>
+            <ul>
+                <li><strong>Accuracy:</strong> 65-75% directional accuracy</li>
+                <li><strong>Sharpe Ratio:</strong> Target 1.5+ annualized</li>
+                <li><strong>Win Rate:</strong> 55-60% typical</li>
+                <li><strong>Risk-Adjusted Returns:</strong> Optimized for consistency</li>
+            </ul>
+
+            <div class="info-box">
+                <h4>🔬 Continuous Improvement</h4>
+                <p>The models continuously learn from new data and adapt to changing market conditions. Performance improves over time as more data is collected.</p>
+            </div>
+        </div>
+
+        <!-- Risk Management -->
+        <div class="guide-section" id="risk-management">
+            <h2>Risk Management</h2>
+
+            <div class="warning-box">
+                <h4>⚠️ Risk Disclaimer</h4>
+                <p>Trading involves substantial risk of loss. Past performance does not guarantee future results. Never trade with money you cannot afford to lose.</p>
+            </div>
+
+            <h3>Risk Controls</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Position Sizing</h4>
+                    <ul>
+                        <li>Kelly Criterion calculation</li>
+                        <li>Maximum position limits</li>
+                        <li>Portfolio diversification</li>
+                        <li>Correlation analysis</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Stop Losses</h4>
+                    <ul>
+                        <li>Automatic stop-loss orders</li>
+                        <li>Trailing stops</li>
+                        <li>Time-based exits</li>
+                        <li>Volatility-adjusted stops</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Exposure Limits</h4>
+                    <ul>
+                        <li>Maximum drawdown limits</li>
+                        <li>Daily loss limits</li>
+                        <li>Sector concentration limits</li>
+                        <li>Leverage restrictions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Risk Parameters Configuration</h3>
+            <p>Edit <code>config/risk.json</code> to customize:</p>
+            <div class="code-block">
+{
+  "maxPositionSizePercent": 10,    // Max 10% in one position
+  "maxTotalExposure": 80,           // Max 80% invested
+  "maxDrawdown": 20,                // Stop at 20% loss
+  "stopLossPercent": 5,             // 5% stop loss
+  "dailyLossLimit": 5,              // Max 5% daily loss
+  "correlationThreshold": 0.7       // Avoid correlated positions
+}
+            </div>
+        </div>
+
+        <!-- Troubleshooting -->
+        <div class="guide-section" id="troubleshooting">
+            <h2>Troubleshooting</h2>
+
+            <h3>Common Issues</h3>
+
+            <h4>🔴 Port Already in Use</h4>
+            <p><strong>Error:</strong> "Error: listen EADDRINUSE: address already in use :::3001"</p>
+            <p><strong>Solution:</strong></p>
+            <div class="code-block">
+# Find and kill the process using port 3001
+lsof -i :3001
+kill -9 [PID]
+
+# Or use a different port
+PORT=3002 npm start
+            </div>
+
+            <h4>🔴 WebSocket Connection Failed</h4>
+            <p><strong>Error:</strong> "WebSocket connection failed"</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Check if you're in paper trading mode (no real connections needed)</li>
+                <li>Verify API keys are correct</li>
+                <li>Check exchange API status</li>
+                <li>Ensure IP is whitelisted on exchange</li>
+            </ul>
+
+            <h4>🔴 Module Not Found</h4>
+            <p><strong>Error:</strong> "Cannot find module..."</p>
+            <p><strong>Solution:</strong></p>
+            <div class="code-block">
+# Clear and reinstall dependencies
+rm -rf node_modules package-lock.json
+npm install
+npm run build
+            </div>
+
+            <h4>🔴 Database Errors</h4>
+            <p><strong>Error:</strong> "Database connection failed"</p>
+            <p><strong>Solution:</strong></p>
+            <div class="code-block">
+# Reset database
+rm -rf data/*.db
+npm start  # Will recreate database
+            </div>
+
+            <h3>Performance Issues</h3>
+            <ul>
+                <li><strong>High CPU Usage:</strong> Normal during model training. Reduce concurrent pairs being traded.</li>
+                <li><strong>Memory Leaks:</strong> Restart the application daily. Check for zombie WebSocket connections.</li>
+                <li><strong>Slow Response:</strong> Reduce the number of indicators or trading pairs.</li>
+            </ul>
+        </div>
+
+        <!-- FAQ -->
+        <div class="guide-section" id="faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <h4>Q: Is this safe to use with real money?</h4>
+            <p>A: The system includes multiple safety features, but all trading carries risk. Start with paper trading, then small amounts if you choose to go live. Never trade money you can't afford to lose.</p>
+
+            <h4>Q: How much can I expect to earn?</h4>
+            <p>A: Returns vary greatly based on market conditions, settings, and luck. The system aims for consistent risk-adjusted returns, not maximum profits. Past performance doesn't guarantee future results.</p>
+
+            <h4>Q: Can I modify the trading strategies?</h4>
+            <p>A: Yes! The code is open and modifiable. Key strategy files are in <code>src/strategies/</code>. Be sure to test changes in paper trading first.</p>
+
+            <h4>Q: What's the minimum capital needed?</h4>
+            <p>A: For paper trading: $0. For live crypto: $100+ recommended. For live stocks: $1,000+ recommended (due to PDT rules if under $25,000).</p>
+
+            <h4>Q: Does it work on weekends?</h4>
+            <p>A: Crypto trading works 24/7 including weekends. Stock trading only works during market hours (Mon-Fri, 9:30 AM - 4:00 PM ET).</p>
+
+            <h4>Q: How do I add more trading pairs?</h4>
+            <p>A: Edit <code>config/trading.json</code> and add symbols to the <code>tradingPairs</code> array.</p>
+
+            <h4>Q: Can I run this on a Raspberry Pi?</h4>
+            <p>A: Yes, but performance may be limited. Recommend at least 4GB RAM and reducing the number of trading pairs.</p>
+
+            <h4>Q: Is my data secure?</h4>
+            <p>A: API keys are stored locally in your <code>.env</code> file. Never share this file or commit it to version control. The system doesn't send data to external servers.</p>
+
+            <h4>Q: How do I update the system?</h4>
+            <p>A: Pull the latest changes from the repository:</p>
+            <div class="code-block">
+git pull origin main
+npm install
+npm run build
+./start.sh
+            </div>
+
+            <h4>Q: Can I run multiple instances?</h4>
+            <p>A: Yes, but use different ports and separate API keys to avoid conflicts.</p>
+        </div>
+
+        <!-- Final Notes -->
+        <div class="guide-section">
+            <h2>Important Reminders</h2>
+            
+            <div class="success-box">
+                <h4>✅ Best Practices</h4>
+                <ul>
+                    <li>Always start with paper trading</li>
+                    <li>Test for at least 2 weeks before going live</li>
+                    <li>Start with small amounts when going live</li>
+                    <li>Monitor the system regularly</li>
+                    <li>Keep your API keys secure</li>
+                    <li>Understand the risks involved</li>
+                    <li>Never invest more than you can afford to lose</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>📚 Additional Resources</h4>
+                <ul>
+                    <li><strong>Source Code:</strong> Review and modify at <code>/src</code></li>
+                    <li><strong>Configuration:</strong> Customize settings in <code>/config</code></li>
+                    <li><strong>Logs:</strong> Check system logs in <code>/logs</code></li>
+                    <li><strong>Database:</strong> SQLite database in <code>/data</code></li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚖️ Legal Disclaimer</h4>
+                <p>This software is provided "as is" without warranty of any kind. The developers are not responsible for any financial losses incurred through the use of this system. Trading cryptocurrencies and stocks involves substantial risk. Past performance is not indicative of future results. Always do your own research and consider consulting with a financial advisor.</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 50px; padding: 20px; opacity: 0.7;">
+            <p>Neural Trader v2.5.0 - AI-Powered Trading Platform</p>
+            <p>Built with TensorFlow.js, Node.js, and Multiple Exchange APIs</p>
+            <div class="navigation-bar" style="margin-top: 20px;">
+                <a href="/" class="nav-button">💹 Crypto Dashboard</a>
+                <a href="/stocks.html" class="nav-button">📈 Stock Dashboard</a>
+                <a href="#" class="nav-button" onclick="window.scrollTo(0,0); return false;">⬆️ Back to Top</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
